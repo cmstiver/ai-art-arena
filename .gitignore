@@ -1,3 +1,4 @@
 backend/venv
 ai-art-arena.code-workspace
 **/__pycache__
+backend/Django/media
