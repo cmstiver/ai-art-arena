@@ -13,7 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'owner', 'url', 'created', 'total_likes', 'title', 'prompt', 'image0', 'image1', 'image2',
+        fields = ['id', 'owner', 'url', 'created', 'total_likes', 'title', 'prompt', 'is_private', 'image0', 'image1', 'image2',
                   'image3', 'image4', 'image5', 'image6', 'image7', 'image8']
 
     def get_total_likes(self, instance):

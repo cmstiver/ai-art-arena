@@ -23,7 +23,7 @@ def api_root(request, format=None):
 
 
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_private__exact=False)
     serializer_class = PostSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -32,6 +32,19 @@ class PostList(generics.ListCreateAPIView):
         token = self.request.auth.key
         serializer.save(owner=Token.objects.get(
             key=token).user)
+
+
+class UserPostList(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        token = self.request.auth.key
+        user = Token.objects.get(key=token).user
+        posts = Post.objects.filter(owner=user)
+        serializer = PostSerializer(
+            posts, many=True, context={'request': request})
+        return Response(serializer.data)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):

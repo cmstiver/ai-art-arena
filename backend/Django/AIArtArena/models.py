@@ -19,6 +19,7 @@ class Post(models.Model):
         'auth.User', related_name='posts', on_delete=models.CASCADE, editable=False)
     liked_by = models.ManyToManyField(
         User, related_name='post_like', editable=False)
+    is_private = models.BooleanField(default=True)
     image0 = models.ImageField(
         upload_to='images/', null=True, blank=True, editable=False)
     image1 = models.ImageField(
@@ -39,10 +40,13 @@ class Post(models.Model):
         upload_to='images/', null=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        is_new_instance = not self.pk
+
+        if is_new_instance:
             self.id = uuid.uuid4().hex
 
-        if not self.image0:
+            self._meta.get_field('prompt').editable = False
+
             generator = Craiyon()
             result = generator.generate(self.prompt)
             images = result.images
