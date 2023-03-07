@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from AIArtArena.models import Post
+from AIArtArena.models import Post, Comment
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,7 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'owner', 'url', 'created', 'total_likes', 'title', 'prompt', 'is_private', 'image0', 'image1', 'image2',
-                  'image3', 'image4', 'image5', 'image6', 'image7', 'image8']
+                  'image3', 'image4', 'image5', 'image6', 'image7', 'image8', 'comments']
 
     def get_total_likes(self, instance):
         return instance.liked_by.count()
@@ -29,6 +29,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'posts', 'post_like']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'post', 'author', 'content', 'created_at']
+        read_only_fields = ['id', 'created_at', 'post', 'author']
 
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -5,5 +5,4 @@ Create and Compete with Generated Images
 ## To-Do
 
 1. Create user profile (profile pic)
-2. Comments
-3. Create stricter user registration
+2. Create stricter user registration

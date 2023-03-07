@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, renderers
-from AIArtArena.models import Post
-from AIArtArena.serializers import PostSerializer, UserSerializer, RegisterSerializer
+from AIArtArena.models import Post, Comment
+from AIArtArena.serializers import PostSerializer, UserSerializer, RegisterSerializer, CommentSerializer
 from rest_framework.views import APIView
 from django.http import FileResponse
 from django.contrib.auth.models import User
@@ -61,6 +61,24 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
+
+
+class CreateComment(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        post_pk = self.kwargs['pk']
+        post = Post.objects.get(pk=post_pk)
+        serializer.save(author=self.request.user, post=post)
+
+
+class ListCommentsView(APIView):
+    def get(self, request, pk):
+        comments = Comment.objects.filter(post=pk)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['PUT'])
