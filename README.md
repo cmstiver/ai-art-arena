@@ -6,3 +6,4 @@ Create and Compete with Generated Images
 
 1. Create user profile (profile pic)
 2. Create stricter user registration
+3. Add a way to change password/username/profile pic seed
