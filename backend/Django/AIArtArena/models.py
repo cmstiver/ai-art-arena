@@ -21,23 +21,23 @@ class Post(models.Model):
         User, related_name='post_like', editable=False)
     is_private = models.BooleanField(default=True)
     image0 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image1 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image2 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image3 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image4 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image5 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image6 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image7 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
     image8 = models.ImageField(
-        upload_to='images/', null=True, blank=True, editable=False)
+        upload_to='ai-images/', null=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
         is_new_instance = not self.pk
@@ -90,3 +90,9 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/', blank=True)
