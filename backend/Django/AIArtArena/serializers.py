@@ -32,10 +32,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author_name = SerializerMethodField()
+
     class Meta:
         model = Comment
-        fields = ['id', 'post', 'author', 'content', 'created_at']
-        read_only_fields = ['id', 'created_at', 'post', 'author']
+        fields = ['id', 'post', 'author',
+                  'author_name', 'content', 'created_at']
+        read_only_fields = ['id', 'created_at',
+                            'post', 'author', 'author_name']
+
+    def get_author_name(self, instance):
+        return instance.author.username
 
 
 class RegisterSerializer(serializers.ModelSerializer):
