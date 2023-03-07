@@ -11,6 +11,7 @@ urlpatterns = format_suffix_patterns([
     path('posts/<str:pk>', views.PostDetail.as_view(), name='post-detail'),
     path('posts/<str:pk>/like/', views.like_post, name="post-like"),
     path('my_posts/', views.UserPostList.as_view(), name="my-posts"),
+    path('my_likes/', views.UserLikeList.as_view(), name="my-likes"),
     path('users/',
          views.UserList.as_view(),
          name='user-list'),

@@ -23,7 +23,7 @@ def api_root(request, format=None):
 
 
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.filter(is_private__exact=False)
+    queryset = Post.objects.filter(is_private=False)
     serializer_class = PostSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -39,9 +39,18 @@ class UserPostList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        token = self.request.auth.key
-        user = Token.objects.get(key=token).user
-        posts = Post.objects.filter(owner=user)
+        posts = Post.objects.filter(owner=request.user)
+        serializer = PostSerializer(
+            posts, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class UserLikeList(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        posts = Post.objects.filter(liked_by=request.user)
         serializer = PostSerializer(
             posts, many=True, context={'request': request})
         return Response(serializer.data)
@@ -59,7 +68,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 @authentication_classes([TokenAuthentication])
 def like_post(request, pk):
     post = Post.objects.filter(id=pk).first()
-    print(post)
 
     if not post:
         return Response({"error": "Post not found"}, status=404)
