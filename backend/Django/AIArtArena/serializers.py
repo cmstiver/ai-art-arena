@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from AIArtArena.models import Post, Comment
+from AIArtArena.models import Post, Comment, Profile
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
@@ -69,6 +69,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
         )
+        user_profile = Profile.objects.create(user=user)
         user.set_password(validated_data['password'])
         user.save()
+        user_profile.save()
         return user

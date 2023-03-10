@@ -94,5 +94,10 @@ class Comment(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/', blank=True)
+    profile_picture = models.URLField(editable=False)
+
+    def save(self, *args, **kwargs):
+        is_new_instance = not self.pk
+        if is_new_instance:
+            self.profile_picture = f"https://api.multiavatar.com/{uuid.uuid4().hex}.svg"
+        super().save(*args, **kwargs)
